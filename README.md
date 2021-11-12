@@ -12,4 +12,5 @@ https://unsplash.com/license
 - [ ] Write a switch to decide wich if a point is give
 - [x] Create a global variabel for points 
 - [ ] Fix "Draw card" button 
-- [ ] Write a seperate function to parse and convert cardvalue
+- [x] Write a seperate function to parse and convert cardvalue
+- [x] Fixed the point counter

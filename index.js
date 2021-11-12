@@ -1,6 +1,7 @@
 let deck = {};
 let points = 0;
-let prevCard = 0;
+let thisCard = 0;
+let prevCard = 1;
 
 async function getCards() {
     // En asynkron funktion osm vi anropar fråt root för att hämta vårat sdeck så fort vår kod laddas och exkveras 
@@ -21,10 +22,10 @@ const drawCardButton = document.getElementById("drawCard"); // Link our HTMLbutt
 drawCardButton.addEventListener("click", async () => {
     // Call the api and get an array of cards + response data
     const res = await fetch (`https://deckofcardsapi.com/api/deck/${deck.deck_id}/draw/?count=1`);
-    const data = await res.json();
+    const data = await res.json();;
     console.log(data.cards[0]); // Logging the first card
     printCard(data.cards[0]);
-    prevCard = data.cards[0].value;
+    thisCard = data.cards[0].value;
 })
 
 const cardPlaceholder = document.getElementById("cardPlaceholder")
@@ -42,33 +43,21 @@ const higherButton = document.getElementById("higherButton");
 const lowerButton = document.getElementById("lowerButton");
 
 lowerButton.addEventListener("click", async () => {
-    // Call the api and get an array of cards + response data
-    const res = await fetch (`https://deckofcardsapi.com/api/deck/${deck.deck_id}/draw/?count=1`);
-    const data = await res.json();
-    console.log(data.cards[0]); // Logging the first card
-    printCard(data.cards[0]);
-    checkValue(2, prevCard,  data.cards[0].value)
+    checkValue(2,  thisCard, prevCard)
 
 })
 
 higherButton.addEventListener("click", async () => {
-    // Call the api and get an array of cards + response data
-    const res = await fetch (`https://deckofcardsapi.com/api/deck/${deck.deck_id}/draw/?count=1`);
-    const data = await res.json();
-    console.log(data.cards[0]); // Logging the first card
-    printCard(data.cards[0]);
-    checkValue(1, prevCard, data.cards[0].value)
+    checkValue(1, thisCard)
 })
 
-function checkValue(highLow, numb, card) {
-    prevCard = numb;
-    card = valueParser(card);
-    numb = valueParser(numb);
-    console.log(card);
-    console.log(numb);    
-    if (highLow === 1){
+function checkValue(highLow, thisCard) {
+    console.log("number to beat: " + prevCard);
+    thisCard = valueParser(thisCard);
 
-        switch(card) {
+    if (highLow === 1){
+        console.log(`${thisCard} should be higher than ${prevCard}`);
+        switch(thisCard) {
             case 2: 
             case 3: 
             case 4:           
@@ -83,8 +72,11 @@ function checkValue(highLow, numb, card) {
             case 13:
             case 14:
             case 15:  
-            if (numb > card) {
-                points += 1;
+            if (prevCard < thisCard) {
+                console.log(points);
+                points++;
+                pointsNumber.innerText = points;
+                console.log("Should be given a point!")
             }
             break;
 
@@ -97,7 +89,7 @@ function checkValue(highLow, numb, card) {
     
         else if(highLow === 2) {
     
-        switch(card) {
+        switch(thisCard) {
             case 2: 
             case 3: 
             case 4: 
@@ -112,27 +104,22 @@ function checkValue(highLow, numb, card) {
             case 13:
             case 14:
             case 15:  
-            if (numb < card) {
+            if (prevCard > thisCard) {
                 points++;
+                pointsNumber.innerText = points;
             }
             break;
 
             default:
                 console.log("Fuck...something went wrong! ");
                 break;
-        
-         
-
-
         }
     }
-
-    prevCard = card;
+    prevCard = thisCard;
 }
     
 
 function valueParser(card) {
-    
         switch(card) {
             case "2": 
             case "3": 
@@ -161,7 +148,7 @@ function valueParser(card) {
             return 15;
 
             default:
-                console.log("Fuck...something went wrong! ");
+                console.log("Look into this!");
                 break;
     
         } 

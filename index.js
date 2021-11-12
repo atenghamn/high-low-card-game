@@ -1,5 +1,6 @@
 let deck = {};
 let points = 0;
+let prevCard = 0;
 
 async function getCards() {
     // En asynkron funktion osm vi anropar fråt root för att hämta vårat sdeck så fort vår kod laddas och exkveras 
@@ -23,6 +24,7 @@ drawCardButton.addEventListener("click", async () => {
     const data = await res.json();
     console.log(data.cards[0]); // Logging the first card
     printCard(data.cards[0]);
+    prevCard = data.cards[0].value;
 })
 
 const cardPlaceholder = document.getElementById("cardPlaceholder")
@@ -45,6 +47,8 @@ lowerButton.addEventListener("click", async () => {
     const data = await res.json();
     console.log(data.cards[0]); // Logging the first card
     printCard(data.cards[0]);
+    checkValue(2, prevCard,  data.cards[0].value)
+
 })
 
 higherButton.addEventListener("click", async () => {
@@ -53,217 +57,61 @@ higherButton.addEventListener("click", async () => {
     const data = await res.json();
     console.log(data.cards[0]); // Logging the first card
     printCard(data.cards[0]);
-    checkValue(1, data.cards[0].value)
+    checkValue(1, prevCard, data.cards[0].value)
 })
 
-function checkValue(numb, card) {
-    console.log(card)
-    if (numb === 1){
+function checkValue(highLow, numb, card) {
+    prevCard = numb;
+    card = valueParser(card);
+    numb = valueParser(numb);
+    console.log(card);
+    console.log(numb);    
+    if (highLow === 1){
 
         switch(card) {
-            case "2": 
-            parseInt(card);
-            if (numb >= card) {
-                points++;
-            }
-            break;
-
-            case "3": 
-            parseInt(card);
+            case 2: 
+            case 3: 
+            case 4:           
+            case 5: 
+            case 6: 
+            case 7: 
+            case 8: 
+            case 9: 
+            case 10: 
+            case 11: 
+            case 12:
+            case 13:
+            case 14:
+            case 15:  
             if (numb > card) {
-                points++;
+                points += 1;
             }
             break;
-
-            case "4": 
-            parseInt(card);
-            if (numb > card) {
-                points++;
-            }
-            break;
-
-            case "5": 
-            parseInt(card);
-            if (numb > card) {
-                points++;
-            }
-            break;
-
-            case "6": 
-            parseInt(card);
-            if (numb > card) {
-                points++;
-            }
-            break;
-
-            case "7": 
-            parseInt(card);
-            if (numb > card) {
-                points++;
-            }
-            break;
-
-            case "8": 
-            parseInt(card);
-            if (numb > card) {
-                points++;
-            }
-            break;
-
-            case "9": 
-            parseInt(card);
-            if (numb > card) {
-                points++;
-            }
-            break;
-
-            case "10": 
-            parseInt(card);
-            if (numb > card) {
-                points++;
-            }
-            break;
-            
-            case "KNIGHT": 
-            card = 11;
-            if (numb > card) {
-                points++;
-            }
-            break;
-
-            case "QUEEN":
-            card = 12; 
-            if (numb > card) {
-                points++;
-            }
-            break;
-
-            case "KING":
-            card = 13; 
-            if (numb > card) {
-                points++;
-            }
-            break;
-
-            case "ACE":
-            card = 14; 
-            if (numb > card) {
-                points++;
-            }
-            break;
-
-            case "JACK":  
-            card = 15;
-            if (numb > card) {
-                points++;
-            }
-            break;
-
 
             default:
                 console.log("Fuck...something went wrong! ");
                 break;
     
         } 
-
     }
     
-        else if(numb === 2) {
+        else if(highLow === 2) {
     
         switch(card) {
-            case "2": 
-            parseInt(card);
-            if (numb <= card) {
-                points++;
-            }
-            break;
-
-            case "3": 
-            parseInt(card);
-            if (numb < card) {
-                points++;
-            }
-            break;
-
-            case "4": 
-            parseInt(card);
-            if (numb < card) {
-                points++;
-            }
-            break;
-
-            case "5": 
-            parseInt(card);
-            if (numb < card) {
-                points++;
-            }
-            break;
-
-            case "6": 
-            parseInt(card);
-            if (numb < card) {
-                points++;
-            }
-            break;
-
-            case "7": 
-            parseInt(card);
-            if (numb < card) {
-                points++;
-            }
-            break;
-
-            case "8": 
-            parseInt(card);
-            if (numb < card) {
-                points++;
-            }
-            break;
-
-            case "9": 
-            parseInt(card);
-            if (numb < card) {
-                points++;
-            }
-            break;
-
-            case "10": 
-            parseInt(card);
-            if (numb < card) {
-                points++;
-            }
-            break;
-            
-            case "KNIGHT": 
-            card = 11;
-            if (numb < card) {
-                points++;
-            }
-            break;
-
-            case "QUEEN":
-            card = 12; 
-            if (numb < card) {
-                points++;
-            }
-            break;
-
-            case "KING":
-            card = 13; 
-            if (numb < card) {
-                points++;
-            }
-            break;
-
-            case "ACE":
-            card = 14; 
-            if (numb < card) {
-                points++;
-            }
-            break;
-
-            case "JACK":  
-            card = 15;
+            case 2: 
+            case 3: 
+            case 4: 
+            case 5: 
+            case 6: 
+            case 7: 
+            case 8: 
+            case 9: 
+            case 10: 
+            case 11: 
+            case 12:
+            case 13:
+            case 14:
+            case 15:  
             if (numb < card) {
                 points++;
             }
@@ -278,5 +126,46 @@ function checkValue(numb, card) {
 
         }
     }
+
+    prevCard = card;
 }
     
+
+function valueParser(card) {
+    
+        switch(card) {
+            case "2": 
+            case "3": 
+            case "4": 
+            case "5": 
+            case "6": 
+            case "7": 
+            case "8": 
+            case "9": 
+            case "10": 
+            return parseInt(card);
+           
+            case "KNIGHT": 
+            return 11;          
+
+            case "QUEEN":
+            return 12; 
+           
+            case "KING":
+            return 13; 
+           
+            case "ACE":
+            return 14;
+
+            case "JACK":  
+            return 15;
+
+            default:
+                console.log("Fuck...something went wrong! ");
+                break;
+    
+        } 
+
+    }
+   
+

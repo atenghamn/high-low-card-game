@@ -9,6 +9,7 @@ https://deckofcardsapi.com/
 https://unsplash.com/license
 
 ### TODOS
-[] Write a switch to decide wich if a point is give
-[x] Create a global variabel for points 
-[] Fix "Draw card" button 
+- [ ] Write a switch to decide wich if a point is give
+- [x] Create a global variabel for points 
+- [ ] Fix "Draw card" button 
+- [ ] Write a seperate function to parse and convert cardvalue

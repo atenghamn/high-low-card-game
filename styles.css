@@ -1,0 +1,28 @@
+body {
+    background-color: darkgreen;
+    color: #fff;
+  
+}
+
+.playArea{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+#cardImage {
+
+    height: 316px;
+    width: 228px;
+}
+
+#lowerButton {
+    margin-left: 1rem;
+}
+
+.points {
+    display: flex;
+    flex-direction: row;
+}

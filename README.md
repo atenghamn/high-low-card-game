@@ -9,8 +9,16 @@ https://deckofcardsapi.com/
 https://unsplash.com/license
 
 ### TODOS
-- [ ] Write a switch to decide wich if a point is give
+- [x] Write a switch to decide if a point is give
 - [x] Create a global variabel for points 
-- [ ] Fix "Draw card" button 
+- [x] Fix "Draw card" button 
 - [x] Write a seperate function to parse and convert cardvalue
 - [x] Fixed the point counter
+- [x] Make precCard a random number when game starts 
+- [x] Test to see if the async function prevents the thisCard value do assign on time
+- [ ] Playtest
+- [ ] Style it
+ 
+
+
+

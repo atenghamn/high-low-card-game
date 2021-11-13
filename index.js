@@ -1,36 +1,51 @@
 let deck = {};
 let points = 0;
 let thisCard = 0;
-let prevCard = 1;
+let prevCard = Math.floor(Math.random() * 14) + 1;
 
 async function getCards() {
     // En asynkron funktion osm vi anropar fråt root för att hämta vårat sdeck så fort vår kod laddas och exkveras 
     const res = await fetch("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1");
     const data = await res.json(); // Vi löser ut body från vårat response och gör om det till ett javascriptobjekt 
-
-   
-    console.log(data);
+   // console.log(data);
     deck = data; // VI assignar dataa till vårat deck så vi kan använda variablen senare. 
-    console.log(deck); 
+   // console.log(deck); 
 }
 
 getCards(); // Anropar funktionen 
 
-
+async function getANewCard(numb) {
+     // Call the api and get an array of cards + response data
+     const res = await fetch (`https://deckofcardsapi.com/api/deck/${deck.deck_id}/draw/?count=1`);
+     const data = await res.json();
+     printCard(data.cards[0]);
+     thisCard = data.cards[0].value;
+     thisCard = valueParser(thisCard);
+     console.log("Created a thisCard value: " + thisCard);
+     checkValue(numb);
+}
 
 const drawCardButton = document.getElementById("drawCard"); // Link our HTMLbutton 
 drawCardButton.addEventListener("click", async () => {
     // Call the api and get an array of cards + response data
     const res = await fetch (`https://deckofcardsapi.com/api/deck/${deck.deck_id}/draw/?count=1`);
     const data = await res.json();;
-    console.log(data.cards[0]); // Logging the first card
+    //console.log(data.cards[0]); // Logging the first card
     printCard(data.cards[0]);
-    thisCard = data.cards[0].value;
+    prevCard = data.cards[0].value;
+    prevCard = valueParser(prevCard);
+    userResponse.innerHTML ="";
+    lowerButton.style.visibility = 'visible';
+    higherButton.style.visibility = 'visible';
 })
 
 const cardPlaceholder = document.getElementById("cardPlaceholder")
 const pointsNumber = document.getElementById("point");
 pointsNumber.innerText = points;
+
+const userResponse = document.getElementById("userResponse");
+userResponse.innerHTML = "Rules: Values are 2-10.  Knight = 11p, Queen = 12p, King = 13p, Ace = 14p and Jack = 15p";
+
 
 function printCard(cards) {
     const cardTitle = document.getElementById("cardTitle");
@@ -43,20 +58,20 @@ const higherButton = document.getElementById("higherButton");
 const lowerButton = document.getElementById("lowerButton");
 
 lowerButton.addEventListener("click", async () => {
-    checkValue(2,  thisCard, prevCard)
-
+   getANewCard(2);
+   lowerButton.style.visibility = 'hidden';
+   higherButton.style.visibility = 'hidden';
 })
 
 higherButton.addEventListener("click", async () => {
-    checkValue(1, thisCard)
+    getANewCard(1); 
+    lowerButton.style.visibility = 'hidden';
+    higherButton.style.visibility = 'hidden';
 })
 
-function checkValue(highLow, thisCard) {
-    console.log("number to beat: " + prevCard);
-    thisCard = valueParser(thisCard);
-
+function checkValue(highLow) {
+ 
     if (highLow === 1){
-        console.log(`${thisCard} should be higher than ${prevCard}`);
         switch(thisCard) {
             case 2: 
             case 3: 
@@ -73,10 +88,9 @@ function checkValue(highLow, thisCard) {
             case 14:
             case 15:  
             if (prevCard < thisCard) {
-                console.log(points);
                 points++;
                 pointsNumber.innerText = points;
-                console.log("Should be given a point!")
+                userResponse.innerHTML =`Nice, you guess was righ! ${thisCard} is higher than ${prevCard}`;
             }
             break;
 
@@ -86,9 +100,7 @@ function checkValue(highLow, thisCard) {
     
         } 
     }
-    
         else if(highLow === 2) {
-    
         switch(thisCard) {
             case 2: 
             case 3: 
@@ -107,6 +119,7 @@ function checkValue(highLow, thisCard) {
             if (prevCard > thisCard) {
                 points++;
                 pointsNumber.innerText = points;
+                userResponse.innerHTML =`Nice, you guess was righ! ${thisCard} is lower than ${prevCard}`;
             }
             break;
 
@@ -115,7 +128,6 @@ function checkValue(highLow, thisCard) {
                 break;
         }
     }
-    prevCard = thisCard;
 }
     
 
@@ -132,7 +144,7 @@ function valueParser(card) {
             case "10": 
             return parseInt(card);
            
-            case "KNIGHT": 
+            case "JACK": 
             return 11;          
 
             case "QUEEN":
@@ -144,7 +156,7 @@ function valueParser(card) {
             case "ACE":
             return 14;
 
-            case "JACK":  
+            case "JOKER":  
             return 15;
 
             default:

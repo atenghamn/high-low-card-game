@@ -16,8 +16,8 @@ https://unsplash.com/license
 - [x] Fixed the point counter
 - [x] Make precCard a random number when game starts 
 - [x] Test to see if the async function prevents the thisCard value do assign on time
-- [ ] Playtest
-- [ ] Style it
+- [x] Playtest
+- [x] Style it
  
 
 

@@ -45,3 +45,10 @@ h1, h2 {
 .pointsButton {
     margin-top: .5rem;
 }
+
+.win {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}

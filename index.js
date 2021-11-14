@@ -30,6 +30,7 @@ async function getANewCard(numb) {
      checkValue(numb);
 }
 
+
 const drawCardButton = document.getElementById("drawCard"); // Link our HTMLbutton
 drawCardButton.style.visibility = 'hidden'; 
 drawCardButton.addEventListener("click", async () => {
@@ -43,6 +44,7 @@ drawCardButton.addEventListener("click", async () => {
     userResponse.innerHTML ="";
     lowerButton.style.visibility = 'visible';
     higherButton.style.visibility = 'visible';
+    rules.innerHTML="";
 })
 
 
@@ -62,10 +64,10 @@ const pointSetter = document.getElementById("pointSetter");
 pointSetter.addEventListener("click", () => {
     
     pointLimit =  pointsTextField.value; 
+    pointLimit =valueParser(pointLimit);
     console.log(pointLimit);
     setPointLimit.style.visibility = 'hidden';
-    hideOrShowButtons();
-    
+    drawCardButton.style.visibility = "visible";     
 });
 
 function printCard(cards) {
@@ -114,6 +116,7 @@ function checkValue(highLow) {
                 points++;
                 pointsNumber.innerText = points;
                 userResponse.innerHTML =`Nice, you guess was righ! ${thisCard} is higher than ${prevCard}`;
+                gameIsWon();
             }
             break;
 
@@ -143,6 +146,7 @@ function checkValue(highLow) {
                 points++;
                 pointsNumber.innerText = points;
                 userResponse.innerHTML =`Nice, you guess was righ! ${thisCard} is lower than ${prevCard}`;
+                gameIsWon();
             }
             break;
 
@@ -183,7 +187,7 @@ function valueParser(card) {
             return 15;
 
             default:
-                console.log("Look into this!");
+                return parseInt(card);
                 break;
     
         } 
@@ -203,10 +207,46 @@ function hideOrShowButtons() {
     }
    
 }
-   
+
+const createStyle = (element, styleArrayArray) => {
+    if (element.length) {
+      element.forEach((item) => {
+        styleArrayArray.forEach((styleArray) => {
+          item.style[styleArray[0]] = styleArray[1];
+        });
+      });
+    } else {
+      styleArrayArray.forEach((styleArray) => {
+        element.style[styleArray[0]] = styleArray[1];
+      });
+    }
+  };
 
 function gameIsWon() {
     if (points === pointLimit) {
-        
+        cardPlaceholder.remove();
+        drawCardButton.remove();
+        higherButton.remove();
+        lowerButton.remove();
+        pointsNumber.remove();
+        userResponse.remove();
+        rules.remove();
+        const pointText = document.getElementById("pointText");
+        pointText.remove();
+        const playArea = document.getElementById("playArea");
+        playArea.remove();
+
+        const winText = document.getElementById("winText");
+        winText.innerHTML = `Nice work, you reached ${points} points!`
+        winText.style.backgroundImage =  url("../img/giorgio-trovato-_XTY6lD8jgM-unsplash.jpg");
+
+        createStyle(winText, [
+    ["height", "800px"], 
+    ["background-image", `url("../img/giorgio-trovato-_XTY6lD8jgM-unsplash.jpg)"`], // Fixa den jävla URL
+    ["background-repeat", "no-repeat"],
+    ["background-size", "cover"],
+    ["background-position", "center"],
+          ]);
+
     }
 }

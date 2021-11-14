@@ -1,21 +1,32 @@
+* {
+    font-family:Arial, Helvetica, sans-serif
+    
+}
+
+
 body {
     background-color: darkgreen;
     color: #fff;
   
 }
 
+h1, h2 {
+    font-family: 'Yuji Boku', serif;  
+}
 .playArea{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
+    margin-top: 3rem;
 }
 
 #cardImage {
 
     height: 316px;
     width: 228px;
+    margin-bottom: 1.5rem;
 }
 
 #lowerButton {
@@ -25,4 +36,12 @@ body {
 .points {
     display: flex;
     flex-direction: row;
+}
+
+.highlowButtons{
+    margin-top: .5rem;
+}
+
+.pointsButton {
+    margin-top: .5rem;
 }

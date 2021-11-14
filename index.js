@@ -2,6 +2,9 @@ let deck = {};
 let points = 0;
 let thisCard = 0;
 let prevCard = Math.floor(Math.random() * 14) + 1;
+let pointLimit = 1; 
+
+
 
 async function getCards() {
     // En asynkron funktion osm vi anropar fråt root för att hämta vårat sdeck så fort vår kod laddas och exkveras 
@@ -14,6 +17,8 @@ async function getCards() {
 
 getCards(); // Anropar funktionen 
 
+
+
 async function getANewCard(numb) {
      // Call the api and get an array of cards + response data
      const res = await fetch (`https://deckofcardsapi.com/api/deck/${deck.deck_id}/draw/?count=1`);
@@ -25,7 +30,8 @@ async function getANewCard(numb) {
      checkValue(numb);
 }
 
-const drawCardButton = document.getElementById("drawCard"); // Link our HTMLbutton 
+const drawCardButton = document.getElementById("drawCard"); // Link our HTMLbutton
+drawCardButton.style.visibility = 'hidden'; 
 drawCardButton.addEventListener("click", async () => {
     // Call the api and get an array of cards + response data
     const res = await fetch (`https://deckofcardsapi.com/api/deck/${deck.deck_id}/draw/?count=1`);
@@ -39,13 +45,28 @@ drawCardButton.addEventListener("click", async () => {
     higherButton.style.visibility = 'visible';
 })
 
+
+
 const cardPlaceholder = document.getElementById("cardPlaceholder")
 const pointsNumber = document.getElementById("point");
 pointsNumber.innerText = points;
 
 const userResponse = document.getElementById("userResponse");
-userResponse.innerHTML = "Rules: Values are 2-10.  Knight = 11p, Queen = 12p, King = 13p, Ace = 14p and Jack = 15p";
+const rules = document.getElementById("rules");
+rules.innerHTML = `Rules: Draw a card - guess if the next card will be higher or lower than the card this card. 
+<br>Values are 2-10 and then Jack = 11p, Queen = 12p, King = 13p, Ace = 14p and Joker = 15p`;
 
+const setPointLimit = document.getElementById("setPointLimit");
+const pointsTextField = document.getElementById("pointsTextField");
+const pointSetter = document.getElementById("pointSetter");
+pointSetter.addEventListener("click", () => {
+    
+    pointLimit =  pointsTextField.value; 
+    console.log(pointLimit);
+    setPointLimit.style.visibility = 'hidden';
+    hideOrShowButtons();
+    
+});
 
 function printCard(cards) {
     const cardTitle = document.getElementById("cardTitle");
@@ -56,6 +77,8 @@ function printCard(cards) {
 
 const higherButton = document.getElementById("higherButton");
 const lowerButton = document.getElementById("lowerButton");
+higherButton.style.visibility = "hidden";
+lowerButton.style.visibility = "hidden";
 
 lowerButton.addEventListener("click", async () => {
    getANewCard(2);
@@ -166,5 +189,24 @@ function valueParser(card) {
         } 
 
     }
+
+function hideOrShowButtons() {
+    
+    if(drawCardButton.style.visibility === 'visible'|| higherButton.style.visibility === 'visible')  {
+        drawCardButton.style.visibility = 'hidden';
+        higherButton.style.visibility = 'hidden';
+        lowerButton.style.visibility = 'hidden';
+    } else {
+        drawCardButton.style.visibility = 'visible';
+        higherButton.style.visibility = 'visible';
+        lowerButton.style.visibility = 'visible';
+    }
+   
+}
    
 
+function gameIsWon() {
+    if (points === pointLimit) {
+        
+    }
+}

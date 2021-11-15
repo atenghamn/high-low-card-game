@@ -46,9 +46,17 @@ h1, h2 {
     margin-top: .5rem;
 }
 
-.win {
+#win {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     color: white;
+    margin-top: 20%;
+}
+
+.fa-trophy {
+    margin-top: 3rem;
+    font-size: 120px;
+    color: goldenrod;
 }

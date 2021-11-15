@@ -17,7 +17,8 @@ async function getCards() {
 
 getCards(); // Anropar funktionen 
 
-
+const pointText = document.getElementById("pointText");
+pointText.style.visibility = "hidden";
 
 async function getANewCard(numb) {
      // Call the api and get an array of cards + response data
@@ -52,22 +53,39 @@ drawCardButton.addEventListener("click", async () => {
 const cardPlaceholder = document.getElementById("cardPlaceholder")
 const pointsNumber = document.getElementById("point");
 pointsNumber.innerText = points;
+pointsNumber.style.visibility ="hidden";
 
 const userResponse = document.getElementById("userResponse");
 const rules = document.getElementById("rules");
 rules.innerHTML = `Rules: Draw a card - guess if the next card will be higher or lower than the card this card. 
 <br>Values are 2-10 and then Jack = 11p, Queen = 12p, King = 13p, Ace = 14p and Joker = 15p`;
 
+
+const win = document.getElementById("win");
+win.style.visibility = "hidden";
+
 const setPointLimit = document.getElementById("setPointLimit");
 const pointsTextField = document.getElementById("pointsTextField");
 const pointSetter = document.getElementById("pointSetter");
 pointSetter.addEventListener("click", () => {
     
-    pointLimit =  pointsTextField.value; 
-    pointLimit =valueParser(pointLimit);
-    console.log(pointLimit);
-    setPointLimit.style.visibility = 'hidden';
-    drawCardButton.style.visibility = "visible";     
+        pointLimit =  pointsTextField.value; 
+        pointLimit = valueParser(pointLimit);
+
+        if(pointLimit > 0 && pointLimit < 27) {
+            console.log("Gick igenom");
+            console.log(pointLimit);
+            setPointLimit.style.visibility = 'hidden';
+            drawCardButton.style.visibility = "visible";     
+            pointText.style.visibility = "visible";
+            pointsNumber.style.visibility ="visible";
+        } else {
+            console.log("Gick inte igenom");
+            console.log(pointLimit);
+            userResponse.style.visibility ="visible";
+            userResponse.innerText = "Choose a number between 1 - 26";
+        }
+
 });
 
 function printCard(cards) {
@@ -208,19 +226,6 @@ function hideOrShowButtons() {
    
 }
 
-const createStyle = (element, styleArrayArray) => {
-    if (element.length) {
-      element.forEach((item) => {
-        styleArrayArray.forEach((styleArray) => {
-          item.style[styleArray[0]] = styleArray[1];
-        });
-      });
-    } else {
-      styleArrayArray.forEach((styleArray) => {
-        element.style[styleArray[0]] = styleArray[1];
-      });
-    }
-  };
 
 function gameIsWon() {
     if (points === pointLimit) {
@@ -236,17 +241,11 @@ function gameIsWon() {
         const playArea = document.getElementById("playArea");
         playArea.remove();
 
+
         const winText = document.getElementById("winText");
         winText.innerHTML = `Nice work, you reached ${points} points!`
-        winText.style.backgroundImage =  url("../img/giorgio-trovato-_XTY6lD8jgM-unsplash.jpg");
+        win.style.visibility = "visible";
 
-        createStyle(winText, [
-    ["height", "800px"], 
-    ["background-image", `url("../img/giorgio-trovato-_XTY6lD8jgM-unsplash.jpg)"`], // Fixa den jävla URL
-    ["background-repeat", "no-repeat"],
-    ["background-size", "cover"],
-    ["background-position", "center"],
-          ]);
-
+       
     }
 }

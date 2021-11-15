@@ -31,14 +31,13 @@ async function getANewCard(numb) {
      checkValue(numb);
 }
 
-
+// Draw a new card from the deck
 const drawCardButton = document.getElementById("drawCard"); // Link our HTMLbutton
 drawCardButton.style.visibility = 'hidden'; 
 drawCardButton.addEventListener("click", async () => {
     // Call the api and get an array of cards + response data
     const res = await fetch (`https://deckofcardsapi.com/api/deck/${deck.deck_id}/draw/?count=1`);
     const data = await res.json();;
-    //console.log(data.cards[0]); // Logging the first card
     printCard(data.cards[0]);
     prevCard = data.cards[0].value;
     prevCard = valueParser(prevCard);
@@ -48,22 +47,24 @@ drawCardButton.addEventListener("click", async () => {
     rules.innerHTML="";
 })
 
-
-
+// Getting the holder for the cards and the element that shows the score
 const cardPlaceholder = document.getElementById("cardPlaceholder")
 const pointsNumber = document.getElementById("point");
 pointsNumber.innerText = points;
 pointsNumber.style.visibility ="hidden";
 
+// Getting the user response (where the rules are written)
 const userResponse = document.getElementById("userResponse");
 const rules = document.getElementById("rules");
 rules.innerHTML = `Rules: Draw a card - guess if the next card will be higher or lower than the card this card. 
 <br>Values are 2-10 and then Jack = 11p, Queen = 12p, King = 13p, Ace = 14p and Joker = 15p`;
 
-
+// Getting the 'win screen' and setting to hidden, will be activated if win-condition is fullfilled
 const win = document.getElementById("win");
 win.style.visibility = "hidden";
 
+
+// Gett the elements to set a point limit 
 const setPointLimit = document.getElementById("setPointLimit");
 const pointsTextField = document.getElementById("pointsTextField");
 const pointSetter = document.getElementById("pointSetter");
@@ -71,7 +72,8 @@ pointSetter.addEventListener("click", () => {
     
         pointLimit =  pointsTextField.value; 
         pointLimit = valueParser(pointLimit);
-
+// Points must be set from 1 to 26 (a stack of cards is 52. Since we just user every other card to guess on we can reach a maximum of 26 points (52/2 = 26) )
+// If poitns are set we hide the elements we will not use 
         if(pointLimit > 0 && pointLimit < 27) {
             console.log("Gick igenom");
             console.log(pointLimit);
@@ -88,6 +90,7 @@ pointSetter.addEventListener("click", () => {
 
 });
 
+// Printing the cards value och suit to the screen
 function printCard(cards) {
     const cardTitle = document.getElementById("cardTitle");
     const cardImage = document.getElementById("cardImage");
@@ -95,11 +98,13 @@ function printCard(cards) {
     cardImage.setAttribute("src", cards.image);
 }
 
+// Create two button, and initaly set them tho hidden (will be shown once we draw a new card)
 const higherButton = document.getElementById("higherButton");
 const lowerButton = document.getElementById("lowerButton");
 higherButton.style.visibility = "hidden";
 lowerButton.style.visibility = "hidden";
 
+// When we press one of the buttons we sen 1 or 2 to the getANewCard function and hide the buttons
 lowerButton.addEventListener("click", async () => {
    getANewCard(2);
    lowerButton.style.visibility = 'hidden';
@@ -112,6 +117,7 @@ higherButton.addEventListener("click", async () => {
     higherButton.style.visibility = 'hidden';
 })
 
+// Check the value we get from getANewCard function. Choose switch based on wich button was pressed
 function checkValue(highLow) {
  
     if (highLow === 1){
@@ -131,15 +137,15 @@ function checkValue(highLow) {
             case 14:
             case 15:  
             if (prevCard < thisCard) {
-                points++;
+                points++;                               // if condition is met, we increase the points and update the HTML
                 pointsNumber.innerText = points;
                 userResponse.innerHTML =`Nice, you guess was righ! ${thisCard} is higher than ${prevCard}`;
-                gameIsWon();
+                gameIsWon(); // for every point gained we check the win condition with this function
             }
             break;
 
             default:
-                console.log("Fuck...something went wrong! ");
+                console.log("Mayday mayday, we crashed and burned!");
                 break;
     
         } 
@@ -169,13 +175,13 @@ function checkValue(highLow) {
             break;
 
             default:
-                console.log("Fuck...something went wrong! ");
+                console.log("Mayday mayday, we crashed and burned!");
                 break;
         }
     }
 }
     
-
+// Parse the card from a string to a number. Needed since we have Jack, Queen etc
 function valueParser(card) {
         switch(card) {
             case "2": 
@@ -212,21 +218,7 @@ function valueParser(card) {
 
     }
 
-function hideOrShowButtons() {
-    
-    if(drawCardButton.style.visibility === 'visible'|| higherButton.style.visibility === 'visible')  {
-        drawCardButton.style.visibility = 'hidden';
-        higherButton.style.visibility = 'hidden';
-        lowerButton.style.visibility = 'hidden';
-    } else {
-        drawCardButton.style.visibility = 'visible';
-        higherButton.style.visibility = 'visible';
-        lowerButton.style.visibility = 'visible';
-    }
-   
-}
-
-
+// Win condition to see we got the desired scores and if so, print a win screen. 
 function gameIsWon() {
     if (points === pointLimit) {
         cardPlaceholder.remove();
